@@ -1,0 +1,36 @@
+workflows:
+  ios-unsigned:
+    name: iOS Unsigned (for sideloading)
+    instance_type: mac_mini_m2
+    max_build_duration: 60
+
+    environment:
+      xcode: latest
+      flutter: stable
+      cocoapods: default
+
+    scripts:
+      - name: Install Flutter dependencies
+        script: |
+          flutter pub get
+
+      - name: Build iOS (no codesign)
+        script: |
+          xcodebuild \
+            -workspace ios/Runner.xcworkspace \
+            -scheme Runner \
+            -configuration Release \
+            -sdk iphoneos \
+            -derivedDataPath build/DerivedData \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO
+
+      - name: Package unsigned IPA
+        script: |
+          mkdir -p build/ipa/Payload
+          cp -R build/DerivedData/Build/Products/Release-iphoneos/Runner.app build/ipa/Payload/
+          cd build/ipa
+          zip -r Runner-unsigned.ipa Payload
+
+    artifacts:
+      - build/ipa/*.ipa
