@@ -1,6 +1,6 @@
 workflows:
   ios-unsigned:
-    name: iOS Unsigned (for sideloading)
+    name: iOS Unsigned
     instance_type: mac_mini_m2
     max_build_duration: 60
 
@@ -13,6 +13,11 @@ workflows:
       - name: Install Flutter dependencies
         script: |
           flutter pub get
+
+      - name: Install CocoaPods dependencies
+        script: |
+          cd ios
+          pod install
 
       - name: Build iOS (no codesign)
         script: |
