@@ -5,7 +5,7 @@ class BrowserController {
   late final WebViewController webView;
 
   final ValueNotifier<String> currentUrl = ValueNotifier(
-    'https://ya.ru',
+    'https://storage.yandexcloud.net/freendex-test/index.html',
   );
 
   final ValueNotifier<bool> canGoBack = ValueNotifier(false);
